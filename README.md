@@ -22,4 +22,5 @@ Matlab R2016a implementation of the Parallel Correlation Filters (PCF) tracker, 
 ## Reference
 
 [1] Martin Danelljan, Goutam Bhat, Fahad Khan, Michael Felsberg. ECO: Efficient Convolution Operators for Tracking. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2017.
-[2] Github:https://github.com/martin-danelljan/ECO 
+
+[2] Github: https://github.com/martin-danelljan/ECO 

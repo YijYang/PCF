@@ -4,6 +4,9 @@ function results = OTB_HC_settings(seq, res_path, bSaveImage, parameters)
 hog_params.cell_size = 6;
 hog_params.compressed_dim = 10;
 
+grayscale_params.colorspace='gray';
+grayscale_params.cell_size = 1;
+
 cn_params.tablename = 'CNnorm';
 cn_params.useForGray = false;
 cn_params.cell_size = 4;
@@ -14,10 +17,10 @@ ic_params.useForColor = false;
 ic_params.cell_size = 4;
 ic_params.compressed_dim = 3;
 
-
 % Which features to include
 params.t_features = {
     struct('getFeature',@get_fhog,'fparams',hog_params),...
+    ...struct('getFeature',@get_colorspace, 'fparams',grayscale_params),...
     struct('getFeature',@get_table_feature, 'fparams',cn_params),...
     struct('getFeature',@get_table_feature, 'fparams',ic_params),...
 };
@@ -40,7 +43,9 @@ params.clamp_position = false;          % Clamp the target position to be inside
 
 % Learning parameters
 params.output_sigma_factor = 1/16;		% Label function sigma
-params.learning_rate = 0.009;	 	 	% Learning rate
+params.learning_rate_pcf1 = 0.009;	 	% PCF1 Learning rate
+params.learning_rate_pcf2 = 0.5;	 	% PCF2 Learning rate
+params.merge_factor = 0.9;	 	        % PCF merge factor
 params.nSamples = 30;                   % Maximum number of stored training samples
 params.sample_replace_strategy = 'lowest_prior';    % Which sample to replace when the memory is full
 params.lt_size = 0;                     % The size of the long-term memory (where all samples have equal weight)
@@ -85,8 +90,8 @@ params.interpolation_windowing = false;     % Do additional windowing on the Fou
 
 % Scale parameters for the translation model
 % Only used if: params.use_scale_filter = false
-% params.number_of_scales = 7;            % Number of scales to run the detector
-% params.scale_step = 1.01;               % The scale factor
+params.number_of_scales = 7;            % Number of scales to run the detector
+params.scale_step = 1.01;               % The scale factor
 
 % Scale filter parameters
 % Only used if: params.use_scale_filter = true
@@ -104,12 +109,8 @@ params.lambda = 1e-2;					% Scale filter regularization
 params.do_poly_interp = true;           % Do 2nd order polynomial interpolation to obtain more accurate scale
 
 % Visualization
-params.visualization = 0;               % Visualiza tracking and detection scores
+params.visualization = 1;               % Visualiza tracking and detection scores
 params.debug = 0;                       % Do full debug visualization
-
-% GPU
-params.use_gpu = false;                 % Enable GPU or not
-params.gpu_id = [];                     % Set the GPU id, or leave empty to use default
 
 % Initialize
 params.seq = seq;

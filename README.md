@@ -13,11 +13,11 @@ Matlab R2016a implementation of the Parallel Correlation Filters (PCF) tracker, 
 2. Start Matlab and navigate to the repository.  
    Run the install script:
 
-   |>> install
+   >> install
 
 3. Run the demo script to test the tracker:
 
-   |>> demo_PCF
+   >> demo_PCF
    
 ## Reference
 

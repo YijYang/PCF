@@ -334,7 +334,7 @@ while true
             % Gives the fourier coefficients of the convolution response.
             scores_fs = permute(gather(scores_fs_sum), [1 2 4 3]);
             scores_fs_pcf = permute(gather(scores_fs_sum_pcf), [1 2 4 3]);
-            scores_fs = scores_fs*0.9 + scores_fs_pcf*0.1;
+            scores_fs = scores_fs*params.merge_factor + scores_fs_pcf*(1-params.merge_factor);
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%              
            % figure(18),mesh(real(scores_fs));
            % figure(19),mesh(real(scores_fs_new));

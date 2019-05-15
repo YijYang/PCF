@@ -109,7 +109,7 @@ params.lambda = 1e-2;					% Scale filter regularization
 params.do_poly_interp = true;           % Do 2nd order polynomial interpolation to obtain more accurate scale
 
 % Visualization
-params.visualization = 1;               % Visualiza tracking and detection scores
+params.visualization = 0;               % Visualiza tracking and detection scores
 params.debug = 0;                       % Do full debug visualization
 
 % Initialize

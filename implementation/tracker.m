@@ -151,7 +151,7 @@ kx = cellfun(@(sz) -ceil((sz(1) - 1)/2) : 0, filter_sz_cell, 'uniformoutput', fa
 sig_y = sqrt(prod(floor(base_target_sz))) * params.output_sigma_factor * (output_sz ./ img_support_sz);
 yf_y = cellfun(@(ky) single(-2 / output_sz(1) * abs(ky)+1), ky, 'uniformoutput', false);
 yf_x = cellfun(@(kx) single(-2 / output_sz(2) * abs(kx)+1), kx, 'uniformoutput', false);
-yf_uniform = cellfun(@(yf_y, yf_x) cast(yf_y * yf_x, 'like', params.data_type), yf_y, yf_x, 'uniformoutput', false);
+yf_triangle = cellfun(@(yf_y, yf_x) cast(yf_y * yf_x, 'like', params.data_type), yf_y, yf_x, 'uniformoutput', false);
 
 % Compute the Fourier series indices and their transposes
 ky = cellfun(@(sz) (-ceil((sz(1) - 1)/2) : floor((sz(1) - 1)/2))', filter_sz_cell, 'uniformoutput', false);
@@ -164,8 +164,8 @@ yf_x = cellfun(@(kx) single(sqrt(2*pi) * sig_y(2) / output_sz(2) * exp(-2 * (pi 
 yf_gaussian = cellfun(@(yf_y, yf_x) cast(yf_y * yf_x, 'like', params.data_type), yf_y, yf_x, 'uniformoutput', false);
 yf = yf_gaussian;
 
-yf{1} = (yf_uniform{1}./max(max(yf_uniform{1}))).*(yf_gaussian{1}./max(max(yf_gaussian{1})));
-yf{2} = (yf_uniform{2}./max(max(yf_uniform{2}))).*(yf_gaussian{2}./max(max(yf_gaussian{2})));
+yf{1} = (yf_triangle{1}./max(max(yf_triangle{1}))).*(yf_gaussian{1}./max(max(yf_gaussian{1})));
+yf{2} = (yf_triangle{2}./max(max(yf_triangle{2}))).*(yf_gaussian{2}./max(max(yf_gaussian{2})));
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % construct cosine window
 cos_window = cellfun(@(sz) hann(sz(1)+2)*hann(sz(2)+2)', feature_sz_cell, 'uniformoutput', false);
@@ -335,10 +335,7 @@ while true
             scores_fs = permute(gather(scores_fs_sum), [1 2 4 3]);
             scores_fs_pcf = permute(gather(scores_fs_sum_pcf), [1 2 4 3]);
             scores_fs = scores_fs*params.merge_factor + scores_fs_pcf*(1-params.merge_factor);
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%              
-           % figure(18),mesh(real(scores_fs));
-           % figure(19),mesh(real(scores_fs_new));
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
+
             % Optimize the continuous score function with Newton's method.
             [trans_row, trans_col, scale_ind] = optimize_scores(scores_fs, params.newton_iterations);
 
